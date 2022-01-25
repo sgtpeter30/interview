@@ -1,0 +1,53 @@
+<h1>Add new book to library</h1>
+<div class="container">  
+  <form [formGroup]="bookForm" name="bookForm" (ngSubmit)="sendForm('post')">
+    <div class="ui-fluid formgrid grid">
+      
+      <div class="field col-12">
+        <label for="id" class="col-fixed">ID</label>
+        <div class="col">
+          <p-inputNumber id="id" formControlName="id" class="form-control" type="number" pInputNumber></p-inputNumber>
+          <div class="errorText" *ngIf="id.invalid && (id.dirty || id.touched)">
+            Id is required.
+          </div>
+        </div>
+      </div>
+
+    
+      <div class="field col-12">
+          <label for="title" class="col-fixed">Title</label>
+          <div class="col">
+            <input id="title" formControlName="title" class="form-control" type="string" pInputText  >
+          </div>
+          <div class="errorText" *ngIf="title.invalid && (title.dirty || title.touched)">
+            Correct title is required.
+          </div>
+          <div class="errorText" *ngIf="(title.errors?.['minlength'])">
+            Name must be at least 7 characters long.
+          </div>
+      </div>
+      <div class="field col-12">
+        <label for="author" class="col-fixed">Author</label>
+        <div class="col">
+          <input id="author" formControlName="author" class="form-control" type="string" pInputText [required]="true" >
+          <div class="errorText" *ngIf="author.invalid && (author.dirty || author.touched)">
+            Author is required.
+          </div>
+        </div>
+        
+      </div>
+      <div class="field col-12">
+          <label for="description" class="col-fixed">Description</label>
+          <div class="col">
+            <textarea id="description" type="text" rows="4" pInputTextarea></textarea>
+          </div>
+      </div>
+      <!-- <div class="field col-12 md-6">
+          <label for="cover">Cover</label>
+          <input id="cover" type="img" pInputText> 
+      </div> -->
+    </div>
+    <button pButton type="submit" label="Submit"></button>
+  </form>
+  <button pButton type="button" icon="pi pi-reply" iconPos="right" label="Go back" (click)="goBack()"></button>
+</div>

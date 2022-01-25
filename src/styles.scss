@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/primeng/resources/themes/bootstrap4-dark-purple/theme.css';
+
+body {
+  background-color: var(--surface-a);
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+a:not(.p-button){
+  color: var(--primary-color);
+  text-decoration: none;
+  &:visited, &:hover{
+    color: var(--text-color);
+  }
+}
