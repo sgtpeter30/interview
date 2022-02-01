@@ -1,35 +1,21 @@
 
 
-
-
-
-<p-dataView #dv [value]="books" layout="list" [rows]="4" >
-  <ng-template let-book pTemplate="listItem">
+<p-dataView #dv [value]="books$ | async" layout="list" [rows]="4">
+  <ng-template let-book pTemplate="listItem" let-column>
     <div class="col-12 md:col-12">
       <h1>
         {{book.id}} Book 
       </h1>
     </div>
-    <div class="col-12 p-md-12">
-      {{columns[1]}}:  {{book.title}}
-    </div>
 
+    <div class="col-12 md:col-6">
+      {{columns[1].colTitle}}:  {{book.title}}
+    </div>
     <div class="col-12 md:col-6 align-items-center">
-      {{columns[2]}}:  {{book.author}}
+      {{columns[2].colTitle}}:  {{book.author}}
     </div>
-    <div class="col-12 md:col-6">
-      <img src="{{book.img}}" alt="{{book.title}}" width="300px">
-    </div>
-    <div class="col-12 md:col-6">
+    <div class="col-12 md:col-12">
       {{book.description}}
     </div>
   </ng-template>
 </p-dataView>
-
-<button pButton type="button" icon="pi pi-reply" iconPos="right" label="Go back" (click)="goBack()"></button>
-
-<!-- todo modify values by put -->
-<div id="changeItem">
-
-
-</div>

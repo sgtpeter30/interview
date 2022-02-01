@@ -1,5 +1,7 @@
-<p-table class="p-col-12" [columns]="columns" [value]="books" responsiveLayout="scroll">
-  <ng-template pTemplate="header" let-columns>
+<h1>Book list</h1>
+
+<p-table class="flex col-12" [value]="books$ | async" responsiveLayout="scroll" scrollHeight="550px">
+  <ng-template pTemplate="header">
       <tr>
           <th *ngFor="let col of columns">
               {{col.colTitle}}

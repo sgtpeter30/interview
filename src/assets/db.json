@@ -3,8 +3,7 @@
     {
       "id": 1,
       "title": "The Hobbit",
-      "author": "J.R.R. Tolkien",
-      "img": "assets/img/1.jpg"
+      "author": "J.R.R. Tolkien"
     },
     {
       "id": 2,
@@ -71,5 +70,6 @@
       "title": "Bramy światłości tom 3",
       "author": "Maja lidia Kossakowska"
     }
+    
   ]
 }

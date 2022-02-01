@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
-import { LibraryService } from '../library.service';
-import {Books} from '../Books';
-import { NavigationService } from '../navigation.service'
-import { Router, NavigationEnd } from '@angular/router'
+import { Book } from '../Book.model';
+import { getBookByID } from '../state/books/books.actions'
+import { selectBookByID } from '../state/books/books.selectors';
 
 @Component({
   selector: 'app-details',
@@ -11,36 +11,22 @@ import { Router, NavigationEnd } from '@angular/router'
   styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent implements OnInit {
+  public books$ = this.store.select(selectBookByID);
 
   constructor(
-    private libraryService : LibraryService,
     private route: ActivatedRoute,
-    private navigation: NavigationService
-    ) {}
-  books : Books[] = [];
-  columns : any;
-  goBack(){
-    console.log(NavigationEnd);
-    console.log(this.navigation.showHistory());
-    this.navigation.back();
-  }
+    private store: Store
+  ) { }
+  books: Book[] = [];
+  columns = [
+    { colTitle: 'ID' },
+    { colTitle: 'Title' },
+    { colTitle: 'Author' },
+    { colTitle: 'Action' }
+  ];
   ngOnInit() {
-    console.log(this.route);
     const routeParams = this.route.snapshot.paramMap;
     const bookIdFromRoute = Number(routeParams.get('booksID'));
-
-    this.libraryService.getBook(bookIdFromRoute).subscribe
-    (
-      (response)=>{
-        this.books = response;
-        this.columns = Object.getOwnPropertyNames(this.books[0]);
-        // console.log(Object.getOwnPropertyNames(response[0]));
-        console.log(this.columns);
-      },
-      (error)=>{
-        console.log("error: "+error);
-      }
-    )
+    this.store.dispatch(getBookByID({ bookID: bookIdFromRoute }));
   }
-
 }

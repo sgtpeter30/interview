@@ -1,41 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { LibraryService } from '../library.service';
 import { NavigationService } from '../navigation.service'
-
+import { Store } from '@ngrx/store';
+import * as BooksActions from '../state/books/books.actions'
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit  {
+  // todo ID hint
+  // public latestID$ = this.store.select(selectLatestID).subscribe(latestID => this.latestID$ = latestID);
   submitted = false;
   bookForm!: FormGroup;
   formType: string | undefined;
   
   constructor(
-    private libraryService : LibraryService,
+    private store: Store,
     private route: ActivatedRoute,
     private navigation: NavigationService
   ) {}
   // todo add possibility to edit data
+  // sending data
   sendForm(formType: string){
     if (this.bookForm.valid) {
-      let data = this.bookForm.value
+      const book = this.bookForm.value
       // POST
-      this.libraryService.postItem(data).subscribe
-      (
-        (response)=>{
-          console.log(response);
-          console.log("added book");
-        },
-        (error)=>{
-          console.log("error: "+error);
-        }
-      )
-
+      this.store.dispatch(BooksActions.addBookTrigger({book: book}));
     }else{
       this.bookForm
       Object.keys(this.bookForm.controls).forEach(field => {
@@ -45,10 +38,10 @@ export class FormComponent implements OnInit {
       });
     }
   }
-  ngOnInit(): void {
-    const routeParams = this.route.snapshot.paramMap;
-    const bookIDFromRoute = Number(routeParams.get('booksID'));
-    // todo add get last occupied ID and put it as default
+    ngOnInit(): void {
+    this.store.dispatch(BooksActions.loadBooksTrigger());
+    // todo put item
+
     this.bookForm = new FormGroup({
       id : new FormControl(null, Validators.required) ,
       title: new FormControl('', [Validators.required, Validators.minLength(7)]),
@@ -73,8 +66,5 @@ export class FormComponent implements OnInit {
   }
   get author() {
     return this.bookForm.get('author');
-  }
-  goBack(){
-    this.navigation.back();
   }
 }

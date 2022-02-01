@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LibraryService } from '../library.service';
-import {Books} from '../Books';
-import { NavigationService } from '../navigation.service'
+import { getBookByAuthor } from '../state/books/books.actions'
+import { Store } from '@ngrx/store';
+import { selectBooksByAuthor } from '../state/books/books.selectors';
 
 @Component({
   selector: 'app-author',
@@ -10,46 +10,22 @@ import { NavigationService } from '../navigation.service'
   styleUrls: ['./author.component.scss']
 })
 export class AuthorComponent implements OnInit {
+  public books$ = this.store.select(selectBooksByAuthor);
 
   constructor(
-    private libraryService : LibraryService,
     private route: ActivatedRoute,
-    private navigation: NavigationService
+    private store: Store
   ) { }
-  books : Books[] = [];
-  columns : any;
   bookAuthor!: string;
-
-  goBack(){
-    console.log(this.navigation.showHistory());
-    this.navigation.back();
-  }
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     const bookAuthorFromRoute = routeParams.get('booksAuthor') || '';
     this.bookAuthor = bookAuthorFromRoute;
     
     if(bookAuthorFromRoute !== ''){
-      this.libraryService.getAuthor(bookAuthorFromRoute).subscribe
-      (
-        (response)=>{
-          console.log(response);
-          if(response.length !== 0){
-            this.books = response;
-            this.columns = Object.getOwnPropertyNames(this.books[0]);
-          }else{
-            this.bookAuthor = "No author"
-          }
-          
-          console.log(this.columns);
-        },
-        (error)=>{
-          console.log("error: "+error);
-        }
-      )
+      this.store.dispatch(getBookByAuthor({author : bookAuthorFromRoute}));
     }else{
       this.bookAuthor = "No author"
     }
   }
-
 }

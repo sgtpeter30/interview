@@ -1,0 +1,22 @@
+
+<div class="flex fixed right-0 flex-wrap col-2">
+
+  <button *ngIf="currentHome$" pButton class="go_back" type="button" icon="pi pi-reply" iconPos="right" label="Go back" (click)="goBack()"></button>
+
+  <h2 class="col-12">History</h2>
+  <div class="flex col-12 flex-wrap">
+    <a 
+      *ngFor="let item of array$"
+      class="link-primary flex col-12" 
+      [title]="item[1][0]"
+      [routerLink]="item[0]"
+      >
+      {{item[1][0]}}
+      <span *ngIf="item[2].booksAuthor !== undefined">
+        {{item[2].booksAuthor}}
+      </span>
+    </a>
+  </div>
+  
+</div>
+
